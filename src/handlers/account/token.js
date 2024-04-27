@@ -2,7 +2,7 @@ import Express from 'express'
 const express = Express()
 import User from '../../database/models/user.js'
 import jwt from 'jsonwebtoken'
-import { CreateId, decode64 } from '../../functions/functions/functions.js';
+import { CreateId, decode64, getUser } from '../../functions/functions/functions.js';
 
 global.accessTokens = [];
 global.refreshTokens = [];
@@ -95,5 +95,27 @@ express.post("/account/api/oauth/token", async (req, res) => {
         });
     }
 });
+
+express.get("/account/api/oauth/verify", getUser, async (req, res) => {
+      let token = req.headers["authorization"].replace("bearer ", "");
+      const deviceId = CreateId();
+  
+      //unfinished
+      res.json({
+        token: token, //needs
+        account_id: req.user.accountId,
+        client_id: "Solaraclientid", //needs
+        internal_client: true,
+        client_service: "fortnite",
+        expires_in: 28800,
+        expires_at: "9999-12-02T01:12:01.100Z",
+        app: "fortnite",
+        auth_method: "password", //needs
+        device_id: deviceId,
+        displayName: req.user.username,
+        in_app_id: req.user.accountId,
+      });
+    }
+  );
 
 export default express

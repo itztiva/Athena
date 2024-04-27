@@ -2,6 +2,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import path from 'path'
+import jwt from 'jsonwebtoken'
 import User from '../../database/models/user.js'
 import Profile from '../../database/models/profiles.js'
 import fs from 'fs/promises';
@@ -9,6 +10,22 @@ import bcrypt from 'bcrypt';
 
 function CreateId() {
     return uuidv4();
+}
+
+async function getUser(req, res, next) {
+  if (!req.headers["authorization"]) {
+    return res.status(401).end();
+  }
+
+  let token = req.headers["authorization"].replace("bearer ", "");
+  let decodedToken = jwt.decode(token);
+
+  if (decodedToken) {
+    req.user = await User.findOne({ email: decodedToken.email });
+    if (!bcrypt.compare(decodedToken.password, req.user.password))
+      return res.status(403).end();
+  }
+  next();
 }
 
 function createError(
@@ -145,4 +162,4 @@ function decode64(str) {
 }
 
 
-export { CreateId, registerUser, createProfiles, decode64, getVersion, createError };
+export { CreateId, registerUser, createProfiles, decode64, getVersion, createError, getUser };

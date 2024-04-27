@@ -4,12 +4,13 @@ import User from '../../database/models/user.js'
 
 express.get("/account/api/public/account/:accountId", async (req, res) => {
     var user = await User.findOne({ accountId: req.params.accountId });
-
-    res.json({
+    let response = {
         id: user.accountId,
-        displayName: user.username,
+        displayName: user.displayName,
         externalAuths: {},
-    });
+    };
+    
+    res.json(response);
 });
 
 express.get("/account/api/public/account", async (req, res) => {
@@ -23,7 +24,7 @@ express.get("/account/api/public/account", async (req, res) => {
         if (user) {
             response.push({
                 id: user.accountId,
-                displayName: user.username,
+                displayName: user.displayName,
                 externalAuths: {},
             });
         }
@@ -37,13 +38,12 @@ express.get("/account/api/public/account", async (req, res) => {
                 if (response.length >= 100) break;
                 response.push({
                     id: user.accountId,
-                    displayName: user.username,
+                    displayName: user.displayName,
                     externalAuths: {},
                 });
             }
         }
     }
-
     res.json(response);
 });
 
