@@ -34,7 +34,7 @@ async function loadHandlers(dir) {
 loadHandlers(path.join("src/handlers"));
 
 express.get("/", async (_, res) => {
-    res.send("Hello everyone!")
+    res.send("Hello Nerds!")
 });
 
 express.use((req, res, next) => {

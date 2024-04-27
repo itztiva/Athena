@@ -20,6 +20,10 @@ express.get("/lightswitch/api/service/bulk/status", async (req, res) => {
     ]);
 });
 
+express.get("/fortnite/api/game/v2/friendcodes/*/epic", async (req, res) => {
+    res.json([])
+});
+
 express.post("/fortnite/api/game/v2/grant_access/*", async (req, res) => {
     res.json({});
     res.status(204);
