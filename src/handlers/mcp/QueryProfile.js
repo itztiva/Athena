@@ -6,57 +6,55 @@ import { getVersion } from '../../functions/functions/functions.js'
 const express = Express();
 
 express.post("/fortnite/api/game/v2/profile/:accountId/client/QueryProfile", async (req, res) => {
-    try {
-        const ver = getVersion;
-        var profiles = await Profile.findOne({ accountId: req.params.accountId });
-        let profile = profiles.profiles[req.query.profileId];
-        if (!profiles) {
-            return res.json({
-                profileRevision: 0,
-                profileId: req.query.profileId,
-                serverTime: new Date().toISOString(),
-                message: "Profile not found",
-                responseVersion: 1,
-            });
-        }
-        if (profile.rvn == profile.commandRevision) {
-            profile.rvn += 1;
-            await profiles?.updateOne({
-                $set: { [`profiles.${req.query.profileId}`]: profile },
-            });
-        }
-        let MultiUpdate = [];
-        let ApplyProfileChanges = [];
-        let BaseRevision = profile.rvn;
-        let ProfileRevisionCheck = ver.build >= 12.2 ? profile.commandRevision : profile.rvn;
-      let QueryRevision = req.query.rvn || -1;
-        if (QueryRevision != ProfileRevisionCheck) {
-            ApplyProfileChanges = [
-              {
-                changeType: "fullProfileUpdate",
-                profile: profile,
-              },
-            ];
-          }
-          ApplyProfileChanges = [
-            {
-              changeType: "fullProfileUpdate",
-              profile: profile,
-            },
-          ];
-        res.json({
-            profileRevision: profile.rvn || 0,
-            profileId: req.query.profileId,
-            profileChangesBaseRevision: BaseRevision,
-            profileChanges: ApplyProfileChanges,
-            profileCommandRevision: profile.commandRevision || 0,
-            serverTime: new Date().toISOString(),
-            multiUpdate: MultiUpdate,
-            responseVersion: 1,
-        });
-    } catch (error) {
-        console.error(error)
+  try {
+    const ver = getVersion;
+    var profiles = await Profile.findOne({ accountId: req.params.accountId });
+    let profile = profiles.profiles[req.query.profileId];
+    if (!profiles) {
+      return res.json({
+        profileRevision: 0,
+        profileId: req.query.profileId,
+        serverTime: new Date().toISOString(),
+        message: "Profile not found",
+        responseVersion: 1,
+      });
     }
+    if (profile.rvn == profile.commandRevision) {
+      profile.rvn += 1;
+      await profiles?.updateOne({ $set: { [`profiles.${req.query.profileId}`]: profile }, });
+    }
+    let MultiUpdate = [];
+    let ApplyProfileChanges = [];
+    let BaseRevision = profile.rvn;
+    let ProfileRevisionCheck = ver.build >= 12.2 ? profile.commandRevision : profile.rvn;
+    let QueryRevision = req.query.rvn || -1;
+    if (QueryRevision != ProfileRevisionCheck) {
+      ApplyProfileChanges = [
+        {
+          changeType: "fullProfileUpdate", 
+          profile: profile,
+        },
+      ];
+    }
+    ApplyProfileChanges = [
+      {
+        changeType: "fullProfileUpdate",
+        profile: profile,
+      },
+    ];
+    res.json({
+      profileRevision: profile.rvn || 0,
+      profileId: req.query.profileId,
+      profileChangesBaseRevision: BaseRevision,
+      profileChanges: ApplyProfileChanges,
+      profileCommandRevision: profile.commandRevision || 0,
+      serverTime: new Date().toISOString(),
+      multiUpdate: MultiUpdate,
+      responseVersion: 1,
+    });
+  } catch (error) {
+    console.error(error)
+  }
 });
 
 export default express;

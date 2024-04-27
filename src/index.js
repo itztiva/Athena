@@ -13,6 +13,7 @@ dotenv.config({ path: path.resolve(__dirname, '..', "config", ".env") });
 mongoose.set("strictQuery", false);
 mongoose.connect("mongodb://wtf.solarisfn.org:27017/Athena")
 
+const PORT = 443
 express.set("trust proxy", true);
 express.use(Express.json());
 express.use(bodyParser.json());
@@ -42,6 +43,6 @@ express.use((req, res, next) => {
     next();
 });
 
-express.listen(443, () => {
+express.listen(PORT, () => {
     log.backend("started")
 });
