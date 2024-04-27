@@ -8,7 +8,6 @@ global.accessTokens = [];
 global.refreshTokens = [];
 
 express.post("/account/api/oauth/token", async (req, res) => {
-    console.log(req.body)
     if (req.body.grant_type == "password") {
         const deviceId = CreateId();
         var clientId = decode64((req.headers["authorization"] ?? "").split(" ")[1]).split(":");

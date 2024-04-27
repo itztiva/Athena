@@ -11,6 +11,37 @@ function CreateId() {
     return uuidv4();
 }
 
+function createError(
+    errorCode,
+    errorMessage,
+    messageVars,
+    numericErrorCode,
+    error,
+    statusCode,
+    res
+  ) {
+    console.log(errorCode);
+    if (res) {
+      res.set({
+        "X-Epic-Error-Name": errorCode,
+        "X-Epic-Error-Code": numericErrorCode,
+      });
+  
+      res.status(statusCode).json({
+        errorCode: errorCode,
+        errorMessage: errorMessage,
+        messageVars: messageVars,
+        numericErrorCode: numericErrorCode,
+        originatingService: "any",
+        intent: "prod",
+        error_description: errorMessage,
+        error: error,
+      });
+    } else {
+      console.error("Response object 'res' is undefined.");
+    }
+  }
+
 function getVersion(req) {
     let ver = { season: 0, build: 0.0, CL: "0", lobby: "" };
   
@@ -114,4 +145,4 @@ function decode64(str) {
 }
 
 
-export { CreateId, registerUser, createProfiles, decode64, getVersion };
+export { CreateId, registerUser, createProfiles, decode64, getVersion, createError };

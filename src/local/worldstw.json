@@ -43,8 +43,8 @@
           "theaterTags": {
             "gameplayTags": [
               {
-                "tagName": "Stat.Theater.PvE01"
-              }
+                "tagName": "Stat.Theater.PvE01" 
+              } 
             ]
           },
           "theaterVisibilityRequirements": {

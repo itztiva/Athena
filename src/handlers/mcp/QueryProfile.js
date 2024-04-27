@@ -1,7 +1,7 @@
 import Express from 'express';
 import User from '../../database/models/user.js';
 import Profile from '../../database/models/profiles.js';
-import { getVersion } from '../../functions/functions/functions.js'
+import { getVersion, createError } from '../../functions/functions/functions.js'
 
 const express = Express();
 
@@ -10,14 +10,9 @@ express.post("/fortnite/api/game/v2/profile/:accountId/client/QueryProfile", asy
     const ver = getVersion;
     var profiles = await Profile.findOne({ accountId: req.params.accountId });
     let profile = profiles.profiles[req.query.profileId];
-    if (!profiles) {
-      return res.json({
-        profileRevision: 0,
-        profileId: req.query.profileId,
-        serverTime: new Date().toISOString(),
-        message: "Profile not found",
-        responseVersion: 1,
-      });
+    if (!profile) {
+      profile = {};
+      profile.rvn = 1
     }
     if (profile.rvn == profile.commandRevision) {
       profile.rvn += 1;
