@@ -5,20 +5,11 @@ import { getVersion } from '../../functions/functions/functions.js'
 
 const express = Express();
 
-express.post("/fortnite/api/game/v2/profile/:accountId/client/QueryProfile", async (req, res) => {
+express.post("/fortnite/api/game/v2/profile/:accountId/client/SetMtxPlatform", async (req, res) => {
     try {
         const ver = getVersion;
         var profiles = await Profile.findOne({ accountId: req.params.accountId });
         let profile = profiles.profiles[req.query.profileId];
-        if (!profiles) {
-            return res.json({
-                profileRevision: 0,
-                profileId: req.query.profileId,
-                serverTime: new Date().toISOString(),
-                message: "Profile not found",
-                responseVersion: 1,
-            });
-        }
         if (profile.rvn == profile.commandRevision) {
             profile.rvn += 1;
             await profiles?.updateOne({

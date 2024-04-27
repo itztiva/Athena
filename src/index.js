@@ -11,10 +11,7 @@ const __dirname = path.dirname(new URL(import.meta.url).pathname);
 dotenv.config({ path: path.resolve(__dirname, '..', "config", ".env") });
 
 mongoose.set("strictQuery", false);
-mongoose.connect("mongodb://wtf.solarisfn.org:27017/Athena", {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+mongoose.connect("mongodb://wtf.solarisfn.org:27017/Athena")
 
 express.set("trust proxy", true);
 express.use(Express.json());
@@ -39,7 +36,12 @@ express.get("/", async (_, res) => {
     res.send("Hello everyone!")
 });
 
+express.use((req, res, next) => {
+    const logMessage = `${req.method} ${req.originalUrl}`;
+    log.backend(logMessage);
+    next();
+});
+
 express.listen(443, () => {
     log.backend("started")
 });
-

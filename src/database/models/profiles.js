@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from 'mongoose'
 
 const ProfilesSchema = new mongoose.Schema({
     accountId: { type: String, required: true},
@@ -13,4 +13,4 @@ const ProfilesSchema = new mongoose.Schema({
 
 const Profiles = mongoose.model("Profiles", ProfilesSchema);
 
-module.exports = Profiles;
+export default Profiles;
