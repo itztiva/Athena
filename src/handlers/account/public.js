@@ -9,7 +9,7 @@ express.get("/account/api/public/account/:accountId", async (req, res) => {
         displayName: user.displayName,
         externalAuths: {},
     };
-    
+    console.log(response)
     res.json(response);
 });
 
@@ -18,9 +18,7 @@ express.get("/account/api/public/account", async (req, res) => {
 
     if (typeof req.query.accountId == "string") {
         let user = await User.findOne({
-            accountId: req.query.accountId,
-            banned: false,
-        }).lean();
+            accountId: req.query.accountId        }).lean();
         if (user) {
             response.push({
                 id: user.accountId,
@@ -44,6 +42,7 @@ express.get("/account/api/public/account", async (req, res) => {
             }
         }
     }
+    console.log(response)
     res.json(response);
 });
 

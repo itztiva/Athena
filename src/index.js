@@ -11,7 +11,7 @@ const __dirname = path.dirname(new URL(import.meta.url).pathname);
 dotenv.config({ path: path.resolve(__dirname, '..', "config", ".env") });
 
 mongoose.set("strictQuery", false);
-mongoose.connect("mongodb://wtf.solarisfn.org:27017/Athena")
+mongoose.connect("mongodb://flip.solarisfn.org:27017/Athena")
 
 const PORT = 443
 express.set("trust proxy", true);
@@ -42,6 +42,8 @@ express.use((req, res, next) => {
     log.backend(logMessage);
     next();
 });
+
+
 
 express.listen(PORT, () => {
     log.backend("started")
