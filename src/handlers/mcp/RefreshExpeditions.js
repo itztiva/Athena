@@ -7,7 +7,7 @@ express.post("/fortnite/api/game/v2/profile/:accountId/client/RefreshExpeditions
     let profile = profiles.profiles[req.query.profileId];
     var expeditionData = require("../../local/expeditionData.json");
 
-    var ApplyProfileChanges = [];
+    var profileChanges = [];
     var BaseRevision = profile.rvn || 0;
     var QueryRevision = req.query.rvn || -1;
     var StatChanged = false;
@@ -30,7 +30,7 @@ express.post("/fortnite/api/game/v2/profile/:accountId/client/RefreshExpeditions
             if (date > expiration_end_time && !profile.items[key].attributes.hasOwnProperty("expedition_start_time")) {
                 delete profile.items[key];
 
-                ApplyProfileChanges.push({
+                profileChanges.push({
                     "changeType": "itemRemoved",
                     "itemId": key
                 })
@@ -85,7 +85,7 @@ express.post("/fortnite/api/game/v2/profile/:accountId/client/RefreshExpeditions
 
         profile.items[ID] = Item;
 
-        ApplyProfileChanges.push({
+        profileChanges.push({
             "changeType": "itemAdded",
             "itemId": ID,
             "item": Item
@@ -101,7 +101,7 @@ express.post("/fortnite/api/game/v2/profile/:accountId/client/RefreshExpeditions
     }
 
     if (QueryRevision != BaseRevision) {
-        ApplyProfileChanges = [{
+        profileChanges = [{
             "changeType": "fullProfileUpdate",
             "profile": profile
         }];
@@ -111,7 +111,7 @@ express.post("/fortnite/api/game/v2/profile/:accountId/client/RefreshExpeditions
         "profileRevision": profile.rvn || 0,
         "profileId": req.query.profileId || "campaign",
         "profileChangesBaseRevision": BaseRevision,
-        "profileChanges": ApplyProfileChanges,
+        "profileChanges": profileChanges,
         "profileCommandRevision": profile.commandRevision || 0,
         "serverTime": new Date().toISOString(),
         "responseVersion": 1

@@ -9,7 +9,7 @@ express.post("/fortnite/api/game/v2/profile/:accountId/client/ClientQuestLogin",
     var QuestIDS = JSON.parse(JSON.stringify(require("../../local/quests.json")));
     const ver = getVersion(req);
 
-    var ApplyProfileChanges = [];
+    var profileChanges = [];
     var BaseRevision = profile.rvn || 0;
     var QueryRevision = req.query.rvn || -1;
     var StatChanged = false;
@@ -70,7 +70,7 @@ express.post("/fortnite/api/game/v2/profile/:accountId/client/ClientQuestLogin",
                     "quantity": 1
                 }
                 profile.items[ItemID] = Item
-                ApplyProfileChanges.push({
+                profileChanges.push({
                     "changeType": "itemAdded",
                     "itemId": ItemID,
                     "item": Item
@@ -135,13 +135,13 @@ express.post("/fortnite/api/game/v2/profile/:accountId/client/ClientQuestLogin",
 
             profile.stats.attributes.quest_manager.dailyLoginInterval = new Date().toISOString();
 
-            ApplyProfileChanges.push({
+            profileChanges.push({
                 "changeType": "itemAdded",
                 "itemId": NewQuestID,
                 "item": profile.items[NewQuestID]
             })
 
-            ApplyProfileChanges.push({
+            profileChanges.push({
                 "changeType": "statModified",
                 "name": "quest_manager",
                 "value": profile.stats.attributes.quest_manager
@@ -155,7 +155,7 @@ express.post("/fortnite/api/game/v2/profile/:accountId/client/ClientQuestLogin",
             if (!key.startsWith(`S${ver.season}-`)) {
                 delete profile.items[key];
 
-                ApplyProfileChanges.push({
+                profileChanges.push({
                     "changeType": "itemRemoved",
                     "itemId": key
                 })
@@ -166,7 +166,7 @@ express.post("/fortnite/api/game/v2/profile/:accountId/client/ClientQuestLogin",
     if (SeasonQuestIDS) {
         for (var Quest in SeasonQuestIDS.Quests) {
             if (profile.items.hasOwnProperty(Quest.itemGuid)) {
-                ApplyProfileChanges.push({
+                profileChanges.push({
                     "changeType": "itemRemoved",
                     "itemId": Quest.itemGuid
                 })
@@ -202,7 +202,7 @@ express.post("/fortnite/api/game/v2/profile/:accountId/client/ClientQuestLogin",
                 profile.items[Quest.itemGuid].attributes[`completion_${Quest.objectives[i].name.toLowerCase()}`] = 0;
             }
 
-            ApplyProfileChanges.push({
+            profileChanges.push({
                 "changeType": "itemAdded",
                 "itemId": Quest.itemGuid,
                 "item": profile.items[Quest.itemGuid]
@@ -210,7 +210,7 @@ express.post("/fortnite/api/game/v2/profile/:accountId/client/ClientQuestLogin",
         }
     }
 
-    if (ApplyProfileChanges.length > 0) {
+    if (profileChanges.length > 0) {
         profile.rvn += 1;
         profile.commandRevision += 1;
         
@@ -219,7 +219,7 @@ express.post("/fortnite/api/game/v2/profile/:accountId/client/ClientQuestLogin",
     }
 
     if (QueryRevision != BaseRevision) {
-        ApplyProfileChanges = [{
+        profileChanges = [{
             "changeType": "fullProfileUpdate",
             "profile": profile
         }];
@@ -229,7 +229,7 @@ express.post("/fortnite/api/game/v2/profile/:accountId/client/ClientQuestLogin",
         "profileRevision": profile.rvn || 0,
         "profileId": req.query.profileId || "athena",
         "profileChangesBaseRevision": BaseRevision,
-        "profileChanges": ApplyProfileChanges,
+        "profileChanges": profileChanges,
         "profileCommandRevision": profile.commandRevision || 0,
         "serverTime": new Date().toISOString(),
         "responseVersion": 1

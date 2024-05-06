@@ -17,19 +17,19 @@ express.post("/fortnite/api/game/v2/profile/:accountId/client/SetMtxPlatform", a
             });
         }
         let MultiUpdate = [];
-        let ApplyProfileChanges = [];
+        let profileChanges = [];
         let BaseRevision = profile.rvn;
         let ProfileRevisionCheck = ver.build >= 12.2 ? profile.commandRevision : profile.rvn;
       let QueryRevision = req.query.rvn || -1;
         if (QueryRevision != ProfileRevisionCheck) {
-            ApplyProfileChanges = [
+            profileChanges = [
               {
                 changeType: "fullProfileUpdate",
                 profile: profile,
               },
             ];
           }
-          ApplyProfileChanges = [
+          profileChanges = [
             {
               changeType: "fullProfileUpdate",
               profile: profile,
@@ -39,7 +39,7 @@ express.post("/fortnite/api/game/v2/profile/:accountId/client/SetMtxPlatform", a
             profileRevision: profile.rvn || 0,
             profileId: req.query.profileId,
             profileChangesBaseRevision: BaseRevision,
-            profileChanges: ApplyProfileChanges,
+            profileChanges: profileChanges,
             profileCommandRevision: profile.commandRevision || 0,
             serverTime: new Date().toISOString(),
             multiUpdate: MultiUpdate,
