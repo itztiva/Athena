@@ -7,7 +7,7 @@ express.post("/fortnite/api/game/v2/profile/:accountId/client/ClientQuestLogin",
     var profiles = await Profile.findOne({ accountId: req.params.accountId });
     let profile = profiles.profiles[req.query.profileId];
     var QuestIDS = JSON.parse(JSON.stringify(require("../../local/quests.json")));
-    const memory = getVersion(req);
+    const ver = getVersion(req);
 
     var ApplyProfileChanges = [];
     var BaseRevision = profile.rvn || 0;
@@ -24,8 +24,8 @@ express.post("/fortnite/api/game/v2/profile/:accountId/client/ClientQuestLogin",
         if (req.query.profileId == "profile0" || req.query.profileId == "campaign") {
             DailyQuestIDS = QuestIDS.SaveTheWorld.Daily
 
-            if (QuestIDS.SaveTheWorld.hasOwnProperty(`Season${memory.season}`)) {
-                SeasonQuestIDS = QuestIDS.SaveTheWorld[`Season${memory.season}`]
+            if (QuestIDS.SaveTheWorld.hasOwnProperty(`Season${ver.season}`)) {
+                SeasonQuestIDS = QuestIDS.SaveTheWorld[`Season${ver.season}`]
             }
 
             for (var key in profile.items) {
@@ -152,7 +152,7 @@ express.post("/fortnite/api/game/v2/profile/:accountId/client/ClientQuestLogin",
 
     for (var key in profile.items) {
         if (key.split("")[0] == "S" && (Number.isInteger(Number(key.split("")[1]))) && (key.split("")[2] == "-" || (Number.isInteger(Number(key.split("")[2])) && key.split("")[3] == "-"))) {
-            if (!key.startsWith(`S${memory.season}-`)) {
+            if (!key.startsWith(`S${ver.season}-`)) {
                 delete profile.items[key];
 
                 ApplyProfileChanges.push({

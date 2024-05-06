@@ -8,7 +8,7 @@
     "profileId": "athena",
     "version": "no_version",
     "items": {
-      "athena-loadout": {
+      "Athena0-loadout": {
         "templateId": "CosmeticLocker:cosmeticlocker_athena",
         "attributes": {
           "locker_slots_data": {
@@ -131933,7 +131933,7 @@
         "past_seasons": [],
         "season_match_boost": 999999999,
         "loadouts": [
-          "athena-loadout"
+          "Athena0-loadout"
         ],
         "favorite_victorypose": "",
         "mfa_reward_claimed": true,
