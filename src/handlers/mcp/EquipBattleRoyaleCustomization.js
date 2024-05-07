@@ -41,8 +41,6 @@ express.post(
             athena.rvn += 1;
             athena.commandRevision += 1;
             athena.updated = new Date().toISOString();
-            profile.markModified("profiles");
-            await profile.save();
 
             res.json({
                 profileRevision: profile.profiles.athena.rvn || 0,
@@ -236,8 +234,6 @@ async function updateProfile(accountId, queryProfileId) {
     athena.rvn += 1;
     athena.commandRevision += 1;
     athena.updated = new Date().toISOString();
-    profiles.markModified("profiles");
-    await profiles.save();
 }
 
 export default express;
