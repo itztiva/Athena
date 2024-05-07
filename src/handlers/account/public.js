@@ -18,7 +18,8 @@ express.get("/account/api/public/account", async (req, res) => {
 
     if (typeof req.query.accountId == "string") {
         let user = await User.findOne({
-            accountId: req.query.accountId        }).lean();
+            accountId: req.query.accountId
+        }).lean();
         if (user) {
             response.push({
                 id: user.accountId,
@@ -28,8 +29,7 @@ express.get("/account/api/public/account", async (req, res) => {
         }
     } else if (Array.isArray(req.query.accountId)) {
         let users = await User.find({
-            accountId: { $in: req.query.accountId },
-            banned: false,
+            accountId: { $in: req.query.accountId }
         }).lean();
         if (users) {
             for (let user of users) {
