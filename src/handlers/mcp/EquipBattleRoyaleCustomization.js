@@ -94,14 +94,6 @@ async function applyCustomization(
         ];
 
     if (profile.profiles.athena.items[req.body.itemToSlot]) {
-        if (
-            !profile.profiles.athena.items[req.body.itemToSlot].templateId.startsWith(
-                `Athena${req.body.slotName}:`
-            )
-        ) {
-            res.status(400).end();
-        }
-
         if (Array.isArray(req.body.variantUpdates)) {
             for (let i in req.body.variantUpdates) {
                 if (typeof req.body.variantUpdates[i] != "object") continue;
